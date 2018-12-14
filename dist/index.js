@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
-var piratefriday_sass_1 = require("piratefriday-sass");
-var info = new piratefriday_sass_1.CssInfo();
+var cssanalyzer_analyzer_1 = require("cssanalyzer-analyzer");
+var info = new cssanalyzer_analyzer_1.CssInfo();
 info.parseFile(path.join('test', 'test.scss'))
     .then(function (result) {
     console.log(result.colors.size + ' Farben gefunden:');

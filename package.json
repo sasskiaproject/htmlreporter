@@ -1,5 +1,5 @@
 {
-  "name": "piratefriday-sass-report",
+  "name": "cssanalyzer-htmlreporter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "piratefriday-sass": "git+ssh://git@git.saitho.me:saitho/piratefriday-scss.git",
+    "cssanalyzer-analyzer": "git+ssh://git@git.saitho.me:cssanalyzer/analyzer.git",
     "typescript": "^3.1.6"
   },
   "author": "",

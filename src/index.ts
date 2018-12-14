@@ -1,5 +1,5 @@
 import * as path from "path";
-import {CssInfo} from "piratefriday-sass";
+import {CssInfo} from "cssanalyzer-analyzer";
 
 const info = new CssInfo();
 info.parseFile(path.join('test', 'test.scss'))

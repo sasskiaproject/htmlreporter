@@ -1,15 +1,13 @@
 import * as path from "path";
 import {CssInfo} from "cssanalyzer-analyzer";
+import {HTMLGenerator} from "./HTMLGenerator";
 
-const info = new CssInfo();
+const info = new CssInfo({ appendContentToFeature: true });
 info.parseFile(path.join('test', 'test.scss'))
     .then((result) => {
-        console.log(result.colors.size + ' Farben gefunden:');
-        result.colors.forEach((value, key) => {
-        console.log('= Farbe ' + key + ' =');
-        for (let color of value) {
-            console.log(color.context + ' - ' + color.selector.prettified + ' { ' + color.property_type + ': ' + color.original + ' }');
-        }
-    });
-})
+        const html = new HTMLGenerator();
+        html.generate(result)
+            .then((outputPath) => console.log('HTML report was generated – check ' + outputPath))
+            .catch((error) => console.error(error));
+    })
     .catch((error) => console.error('Error: ', error));

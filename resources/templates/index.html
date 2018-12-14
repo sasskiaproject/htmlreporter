@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SCSS Analyzer Report</title>
+    <style type="text/css">
+        .package-list {
+            width: 100%;
+            border: 1px solid #000;
+        }
+        body {
+            font-family: sans-serif;
+        }
+
+        .package-list__head,
+        .package-list__body__package {
+            height: 30px;
+        }
+
+        .package-list__body__package {
+            cursor: pointer;
+        }
+
+        .package-list__body__package td {
+            padding: 5px;
+            border: 1px solid #000;
+        }
+
+        .package-list__head {
+            background-color: #666;
+            color: #fff;
+        }
+
+        .package-list__body__package--even {
+            background-color: #ccc;
+        }
+
+        .package-list__body__package--odd {
+            background-color: #aaa;
+        }
+
+        td.color {
+            min-width: 50px;
+            border: 1px solid;
+        }
+
+
+        /* Bare bones style for the desired effect */
+        pre.code {
+            display: table;
+            table-layout: fixed;
+            width: 100%; /* anything but auto, otherwise fixed layout not guaranteed */
+            white-space: pre-wrap;
+        }
+        pre.code::before {
+            counter-reset: linenum;
+        }
+        pre.code span.tr {
+            display: table-row;
+            counter-increment: linenum;
+        }
+        pre.code span.th { /* used for line numbers */
+            display: table-cell;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+        pre.code span.th {
+            background: #f0f0f0;
+            padding: 3px;
+            padding-top: 3px;
+            padding-top: 0px;
+            border-right: solid 1px silver;
+            border-top: solid 1px silver;
+        }
+        pre.code span.th::before {
+            content: counter(linenum);
+            text-align: right;
+            display: block;
+        }
+        pre.code span.th {
+            width: 4em; /* or whatever the desired width of the numbers column is */
+        }
+        pre.code code {
+            display: table-cell;
+        }
+        pre.code span.tr,
+        pre.code span.tr code {
+            background-color: #fff;
+        }
+        pre.code span.tr.odd,
+        pre.code span.tr.odd code {
+            background-color: #f0f8ff;
+        }
+
+        pre.code span.tr.highlighted span.th {
+            background-color: #f0e68c;
+        }
+
+        pre.code span.tr.highlighted,
+        pre.code span.tr.highlighted code {
+            background-color: #ffff9a;
+        }
+
+        pre.code span.info {
+            display: none;
+        }
+        pre.code span.highlighted span.info {
+            display: block;
+        }
+
+        span.color {
+            padding: 0 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CSS Analyzer Report</h1>
+
+<h2>Colors ({{result.colors.size}})</h2>
+<h3>Color map</h3>
+<table>
+    {{#each_in_map result.colors}}
+    <tr>
+        <td class="color" style="background-color:{{key}};">{{key}}</td>
+        <td>{{value.length}} usages</td>
+    </tr>
+    {{/each_in_map}}
+</table>
+
+<h3>Color list</h3>
+<section>
+    <legend>
+        <label>Defined by...</label>
+        <input type="checkbox" id="filter-btn__definedby__name" checked value="1"> Name
+        <input type="checkbox" id="filter-btn__definedby__variable" checked value="1"> Variable
+        <input type="checkbox" id="filter-btn__definedby__hex" checked value="1"> HEX
+        <input type="checkbox" id="filter-btn__definedby__rgba" checked value="1"> RGBA
+    </legend>
+</section>
+{{#each_in_map result.colors}}
+    <h4><span class="color" style="background-color:{{key}}"></span> {{key}}</h4>
+    <table class="package-list" cellpadding="0" cellspacing="0">
+        <thead class="package-list__head">
+        <tr>
+            <th>CSS selector</th>
+            <th>File</th>
+            <th>Type</th>
+            <th>Defined by</th>
+        </tr>
+        </thead>
+        <tbody class="package-list__body">
+        {{#each value}}
+            <tr onclick="toggle('codeblock-{{uuid}}')" class="filter__defined-by--{{original_type}} package-list__body__package package-list__body__package--{{#if_even @index}}even{{^}}odd{{/if_even}}">
+                <td>
+                    <strong>{{selector.prettified}}</strong>
+                </td>
+                <td>{{context.file}}:{{line}}</td>
+                <td>{{property_type}}</td>
+                <td>{{original_type}}</td>
+            </tr>
+        <tr id="codeblock-{{uuid}}" style="display: none;" class="filter__defined-by--{{original_type}} package-list__body__package package-list__body__package--{{#if_even @index}}even{{^}}odd{{/if_even}}">
+            <td colspan="4">
+                <pre class="code">
+                    {{#each context.content}}
+                        <span class="tr {{#if_even @index}}even{{^}}odd{{/if_even}} {{#if_cond @index 0}}first-row{{/if_cond}} {{#if_cond_difference_equals ../line ../context.start.line @index}}highlighted{{/if_cond_difference_equals}}" style="{{#if_cond @index 0}}counter-increment: linenum {{../context.start.line}} {{/if_cond}}"><span class="th"></span><code>{{this}}</code><span class="info">// {{../original}}</span></span>
+                    {{/each}}
+                </pre>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+{{/each_in_map}}
+<script type="text/javascript">
+    function toggle(id) {
+        const block = document.getElementById(id);
+        block.style.display = block.style.display === 'none' ? 'table-row' : 'none';
+    }
+
+    window.addEventListener('load', function () {
+        const defined_by = ['name', 'variable', 'hex', 'rgba'];
+        for (const by of defined_by) {
+            document.getElementById('filter-btn__definedby__' + by).addEventListener("change", (e) => {
+                document.querySelectorAll('.filter__defined-by--' + by).forEach(value => {
+                    value.style.display = e.target.checked ? 'table-row' : 'none';
+                })
+            });
+        }
+    }, false);
+</script>
+</body>
+</html>

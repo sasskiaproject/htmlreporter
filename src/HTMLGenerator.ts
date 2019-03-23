@@ -2,7 +2,8 @@ import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as path from "path";
 import {HandlebarHelper} from "./HandlebarHelper";
-import {CssInfoResult} from "../node_modules/cssanalyzer-analyzer/dist/src/CssInfo";
+import {CssInfoResult} from 
+"../node_modules/sasskia-analyzer/dist/src/CssInfo";
 
 export class HTMLGenerator {
     protected arguments = [];

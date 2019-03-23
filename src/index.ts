@@ -1,5 +1,5 @@
 import * as path from "path";
-import {CssInfo} from "cssanalyzer-analyzer";
+import {CssInfo} from "sasskia-analyzer";
 import {HTMLGenerator} from "./HTMLGenerator";
 
 const info = new CssInfo({ appendContentToFeature: true });

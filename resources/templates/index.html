@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>SCSS Analyzer Report</title>
     <style type="text/css">
@@ -66,9 +66,7 @@
         }
         pre.code span.th {
             background: #f0f0f0;
-            padding: 3px;
-            padding-top: 3px;
-            padding-top: 0px;
+            padding: 0 3px 3px 3px;
             border-right: solid 1px silver;
             border-top: solid 1px silver;
         }
@@ -118,7 +116,7 @@
 
 <h1>CSS Analyzer Report</h1>
 
-<h2>Colors ({{result.colors.size}})</h2>
+<h2>Colors ({{result.colors.length}})</h2>
 <h3>Color map</h3>
 <table>
     {{#each_in_map result.colors}}
@@ -133,15 +131,15 @@
 <section>
     <legend>
         <label>Defined by...</label>
-        <input type="checkbox" id="filter-btn__definedby__name" checked value="1"> Name
-        <input type="checkbox" id="filter-btn__definedby__variable" checked value="1"> Variable
-        <input type="checkbox" id="filter-btn__definedby__hex" checked value="1"> HEX
-        <input type="checkbox" id="filter-btn__definedby__rgba" checked value="1"> RGBA
+        <input type="checkbox" id="filter-btn__definedby__name" checked value="1"/> Name
+        <input type="checkbox" id="filter-btn__definedby__variable" checked value="1"/> Variable
+        <input type="checkbox" id="filter-btn__definedby__hex" checked value="1"/> HEX
+        <input type="checkbox" id="filter-btn__definedby__rgba" checked value="1"/> RGBA
     </legend>
 </section>
 {{#each_in_map result.colors}}
     <h4><span class="color" style="background-color:{{key}}"></span> {{key}}</h4>
-    <table class="package-list" cellpadding="0" cellspacing="0">
+    <table class="package-list">
         <thead class="package-list__head">
         <tr>
             <th>CSS selector</th>
